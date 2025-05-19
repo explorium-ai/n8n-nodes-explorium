@@ -1,58 +1,67 @@
 {
-  "name": "n8n-nodes-<...>",
-  "version": "0.1.0",
-  "description": "",
-  "keywords": [
-    "n8n-community-node-package"
-  ],
-  "license": "MIT",
-  "homepage": "",
-  "author": {
-    "name": "",
-    "email": ""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
-  },
-  "engines": {
-    "node": ">=18.10",
-    "pnpm": ">=9.1"
-  },
-  "packageManager": "pnpm@9.1.4",
-  "main": "index.js",
-  "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "build": "tsc && gulp build:icons",
-    "dev": "tsc --watch",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "pnpm build && pnpm lint -c .eslintrc.prepublish.js nodes credentials package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "n8n": {
-    "n8nNodesApiVersion": 1,
-    "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
-    ],
-    "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
-    ]
-  },
-  "devDependencies": {
-    "@typescript-eslint/parser": "^7.15.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.1",
-    "gulp": "^4.0.2",
-    "prettier": "^3.3.2",
-    "typescript": "^5.5.3"
-  },
-  "peerDependencies": {
-    "n8n-workflow": "*"
-  }
+	"name": "n8n-nodes-explorium",
+	"version": "0.1.25",
+	"description": "Explorium MCP node for n8n",
+	"keywords": [
+		"n8n-community-node-package",
+		"mcp",
+		"explorium-mcp",
+		"explorium",
+		"mcp-client-n8n",
+		"explorium-mcp-n8n"
+	],
+	"license": "MIT",
+	"homepage": "",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nerding-io/n8n-nodes-mcp.git"
+	},
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc && gulp build:icons",
+		"dev": "tsc --watch",
+		"format": "prettier nodes credentials --write",
+		"lint": "eslint nodes credentials package.json",
+		"lintfix": "eslint nodes credentials package.json --fix",
+		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json",
+		"test": "jest"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"nodes": [
+			"dist/nodes/ExploriumMcp/ExploriumMcp.node.js"
+		]
+	},
+	"devDependencies": {
+		"@types/jest": "^29.5.14",
+		"@typescript-eslint/parser": "~5.45",
+		"eslint": "^8.57.1",
+		"eslint-plugin-n8n-nodes-base": "^1.11.0",
+		"gulp": "^4.0.2",
+		"jest": "^29.7.0",
+		"n8n-workflow": "*",
+		"prettier": "^2.7.1",
+		"ts-jest": "^29.2.6",
+		"typescript": "~4.8.4"
+	},
+	"dependencies": {
+		"@langchain/core": "^0.3.43",
+		"@modelcontextprotocol/sdk": "1.5.0",
+		"@n8n/json-schema-to-zod": "^1.1.0",
+		"i": "^0.3.7",
+		"json-schema": "^0.4.0",
+		"langchain": "^0.3.26",
+		"npm": "^11.4.0",
+		"zod": "^3.24.0",
+		"zod-to-json-schema": "^3.24.0"
+	},
+	"overrides": {
+		"pkce-challenge": "3.0.0"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
 }
