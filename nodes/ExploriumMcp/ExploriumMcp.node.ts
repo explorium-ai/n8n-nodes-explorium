@@ -17,7 +17,7 @@ import {
 } from './utils';
 
 // Constant SSE Endpoint
-const SSE_ENDPOINT = 'https://explorium-mcp-sse.explorium.ninja/sse';
+const SSE_ENDPOINT = 'https://mcp.explorium.ai/sse';
 
 export class ExploriumMcp implements INodeType {
 	description: INodeTypeDescription = {
@@ -46,25 +46,45 @@ export class ExploriumMcp implements INodeType {
 		},
 		inputs: [],
 		outputs: [{ type: NodeConnectionType.AiTool, displayName: 'Tools' }],
+
 		credentials: [
 			{
-				name: 'httpHeaderAuth',
+				// eslint-disable-next-line n8n-nodes-base/node-class-description-credentials-name-unsuffixed
+				name: 'httpBearerAuth',
 				required: true,
+				displayOptions: {
+					show: {
+						authentication: ['bearerAuth'],
+					},
+				},
 			},
 		],
-		properties: [],
+		properties: [
+			{
+				displayName: 'Authentication',
+				name: 'authentication',
+				type: 'options',
+				options: [
+					{
+						name: 'Bearer Auth',
+						value: 'bearerAuth',
+					},
+				],
+				default: 'bearerAuth',
+				description: 'The way to authenticate with your SSE endpoint',
+			},
+		],
 	};
 
 	async supplyData(this: ISupplyDataFunctions, itemIndex: number): Promise<SupplyData> {
-
 		const node = this.getNode();
-		
+
 		const { headers } = await getAuthHeaders(this);
-		
+
 		if (!headers) {
-			const error = new NodeOperationError(node, 'HTTP Header Authentication is required', { 
-				itemIndex, 
-				description: 'Please configure the HTTP Header Authentication credentials properly.' 
+			const error = new NodeOperationError(node, 'HTTP Header Authentication is required', {
+				itemIndex,
+				description: 'Please configure the HTTP Header Authentication credentials properly.',
 			});
 			this.addOutputData(NodeConnectionType.AiTool, itemIndex, error);
 			throw error;
@@ -93,7 +113,9 @@ export class ExploriumMcp implements INodeType {
 					return setError('Could not connect to Explorium MCP server. The server URL is invalid.');
 				case 'connection':
 				default:
-					return setError('Could not connect to Explorium MCP server. Please check your credentials and try again.');
+					return setError(
+						'Could not connect to Explorium MCP server. Please check your credentials and try again.',
+					);
 			}
 		}
 
@@ -122,6 +144,8 @@ export class ExploriumMcp implements INodeType {
 
 		const toolkit = new McpToolkit(tools);
 
-		return { response: toolkit, closeFunction: async () => await client.result.close() };
+		// console.log('ITAY--tools', toolkit.getTools());
+
+		return { response: toolkit.tools, closeFunction: async () => await client.result.close() };
 	}
 }

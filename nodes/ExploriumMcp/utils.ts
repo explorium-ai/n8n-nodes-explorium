@@ -55,8 +55,11 @@ export const createCallTool =
 	(name: string, client: Client, onError: (error: string | undefined) => void) =>
 	async (args: IDataObject) => {
 		try {
-			const result = await client.callTool({ name, arguments: args }, CompatibilityCallToolResultSchema);
-			
+			const result = await client.callTool(
+				{ name, arguments: args },
+				CompatibilityCallToolResultSchema,
+			);
+
 			if (result.isError) {
 				return onError(getErrorDescriptionFromToolCall(result));
 			}
@@ -79,7 +82,6 @@ export function mcpToolToDynamicTool(
 	tool: McpTool,
 	onCallTool: DynamicStructuredToolInput['func'],
 ) {
-
 	return new DynamicStructuredTool({
 		name: tool.name,
 		description: tool.description ?? '',
@@ -165,13 +167,13 @@ export async function getAuthHeaders(
 	ctx: Pick<IExecuteFunctions, 'getCredentials'>,
 ): Promise<{ headers?: Record<string, string> }> {
 	try {
-		const header = await ctx.getCredentials<{ name: string; value: string }>('httpHeaderAuth');
-		
-		if (!header || !header.name || !header.value) {
+		const header = await ctx.getCredentials<{ token: string }>('httpBearerAuth');
+
+		if (!header || !header.token) {
 			return { headers: undefined };
 		}
 
-		return { headers: { [header.name]: header.value } };
+		return { headers: { Authorization: `Bearer ${header.token}` } };
 	} catch (error) {
 		// Credentials couldn't be retrieved
 		return { headers: undefined };
@@ -181,4 +183,3 @@ export async function getAuthHeaders(
 export function convertJsonSchemaToZod<T extends z.ZodTypeAny = z.ZodTypeAny>(schema: JSONSchema7) {
 	return jsonSchemaToZod<T>(schema);
 }
-
