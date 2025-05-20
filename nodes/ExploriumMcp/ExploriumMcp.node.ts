@@ -11,7 +11,6 @@ import {
 	connectMcpClient,
 	createCallTool,
 	getAllTools,
-	McpToolkit,
 	mcpToolToDynamicTool,
 	getAuthHeaders,
 } from './utils';
@@ -46,15 +45,13 @@ export class ExploriumMcp implements INodeType {
 		},
 		inputs: [],
 		outputs: [{ type: NodeConnectionType.AiTool, displayName: 'Tools' }],
-
 		credentials: [
 			{
-				// eslint-disable-next-line n8n-nodes-base/node-class-description-credentials-name-unsuffixed
-				name: 'httpBearerAuth',
+				name: 'httpHeaderAuth',
 				required: true,
 				displayOptions: {
 					show: {
-						authentication: ['bearerAuth'],
+						authentication: ['headerAuth'],
 					},
 				},
 			},
@@ -66,12 +63,27 @@ export class ExploriumMcp implements INodeType {
 				type: 'options',
 				options: [
 					{
-						name: 'Bearer Auth',
-						value: 'bearerAuth',
+						name: 'Header Auth',
+						value: 'headerAuth',
+					},
+					{
+						name: 'None',
+						value: 'none',
 					},
 				],
-				default: 'bearerAuth',
+				default: 'none',
 				description: 'The way to authenticate with your SSE endpoint',
+			},
+			{
+				displayName: 'Credentials',
+				name: 'credentials',
+				type: 'credentials',
+				default: '',
+				displayOptions: {
+					show: {
+						authentication: ['headerAuth'],
+					},
+				},
 			},
 		],
 	};
@@ -122,20 +134,20 @@ export class ExploriumMcp implements INodeType {
 			);
 		}
 
-		const tools = allTools.map((tool) =>
-			mcpToolToDynamicTool(
-				tool,
-				createCallTool(tool.name, client.result, (error) => {
-					this.logger.error(`ExploriumMcp: Tool "${tool.name}" failed to execute`, { error });
-					throw new NodeOperationError(node, `Failed to execute tool "${tool.name}"`, {
-						description: error,
-					});
-				}),
-			),
+		const tools = allTools.map(
+			(tool) =>
+				mcpToolToDynamicTool(
+					tool,
+					createCallTool(tool.name, client.result, (error) => {
+						this.logger.error(`ExploriumMcp: Tool "${tool.name}" failed to execute`, { error });
+						throw new NodeOperationError(node, `Failed to execute tool "${tool.name}"`, {
+							description: error,
+						});
+					}),
+				),
+			this,
 		);
 
-		const toolkit = new McpToolkit(tools);
-
-		return { response: toolkit.tools, closeFunction: async () => await client.result.close() };
+		return { response: tools, closeFunction: async () => await client.result.close() };
 	}
 }

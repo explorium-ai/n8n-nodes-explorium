@@ -167,13 +167,13 @@ export async function getAuthHeaders(
 	ctx: Pick<IExecuteFunctions, 'getCredentials'>,
 ): Promise<{ headers?: Record<string, string> }> {
 	try {
-		const header = await ctx.getCredentials<{ token: string }>('httpBearerAuth');
+		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuth');
 
-		if (!header || !header.token) {
+		if (!header || !header.value) {
 			return { headers: undefined };
 		}
 
-		return { headers: { Authorization: `Bearer ${header.token}` } };
+		return { headers: { Authorization: `Bearer ${header.value}` } };
 	} catch (error) {
 		// Credentials couldn't be retrieved
 		return { headers: undefined };
