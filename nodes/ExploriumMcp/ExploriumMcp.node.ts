@@ -26,7 +26,7 @@ export class ExploriumMcp implements INodeType {
 		icon: 'file:mcpClient.svg',
 		group: ['output'],
 		version: 1,
-		description: 'Connect to Explorium MCP Server',
+		description: 'Connect to Explorium Agent Source',
 		defaults: {
 			name: 'Explorium MCP',
 		},
@@ -104,22 +104,14 @@ export class ExploriumMcp implements INodeType {
 		};
 
 		if (!client.ok) {
-			this.logger.error('McpClientTool: Failed to connect to MCP Server', {
+			this.logger.error('ExploriumMcp: Failed to connect to MCP Server', {
 				error: client.error,
 			});
 
-			switch (client.error.type) {
-				case 'invalid_url':
-					return setError('Could not connect to Explorium MCP server. The server URL is invalid.');
-				case 'connection':
-				default:
-					return setError(
-						'Could not connect to Explorium MCP server. Please check your credentials and try again.',
-					);
-			}
+			return setError('Could not connect to Explorium MCP server.');
 		}
 
-		this.logger.debug('McpClientTool: Successfully connected to MCP Server');
+		this.logger.debug('ExploriumMcp: Successfully connected to MCP Server');
 
 		const allTools = await getAllTools(client.result);
 
@@ -134,7 +126,7 @@ export class ExploriumMcp implements INodeType {
 			mcpToolToDynamicTool(
 				tool,
 				createCallTool(tool.name, client.result, (error) => {
-					this.logger.error(`McpClientTool: Tool "${tool.name}" failed to execute`, { error });
+					this.logger.error(`ExploriumMcp: Tool "${tool.name}" failed to execute`, { error });
 					throw new NodeOperationError(node, `Failed to execute tool "${tool.name}"`, {
 						description: error,
 					});
@@ -143,8 +135,6 @@ export class ExploriumMcp implements INodeType {
 		);
 
 		const toolkit = new McpToolkit(tools);
-
-		// console.log('ITAY--tools', toolkit.getTools());
 
 		return { response: toolkit.tools, closeFunction: async () => await client.result.close() };
 	}

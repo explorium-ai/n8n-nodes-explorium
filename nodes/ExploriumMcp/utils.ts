@@ -14,7 +14,7 @@ import { type ZodTypeAny, z } from 'zod';
 import { jsonSchemaToZod } from '@n8n/json-schema-to-zod';
 import type { JSONSchema7 } from 'json-schema';
 
-import type { McpTool } from './types';
+type McpTool = { name: string; description?: string; inputSchema: JSONSchema7 };
 
 export async function getAllTools(client: Client, cursor?: string): Promise<McpTool[]> {
 	const { tools, nextCursor } = await client.listTools({ cursor });
