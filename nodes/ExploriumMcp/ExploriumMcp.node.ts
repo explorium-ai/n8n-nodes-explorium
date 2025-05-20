@@ -43,11 +43,13 @@ export class ExploriumMcp implements INodeType {
 				],
 			},
 		},
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-inputs-wrong-regular-node
 		inputs: [],
+		// eslint-disable-next-line n8n-nodes-base/node-class-description-outputs-wrong
 		outputs: [{ type: NodeConnectionType.AiTool, displayName: 'Tools' }],
 		credentials: [
 			{
-				name: 'httpHeaderAuth',
+				name: 'httpHeaderAuthApi',
 				required: true,
 				displayOptions: {
 					show: {

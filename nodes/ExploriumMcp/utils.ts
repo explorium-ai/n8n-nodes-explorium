@@ -138,7 +138,7 @@ export async function getAuthHeaders(
 	ctx: Pick<IExecuteFunctions, 'getCredentials'>,
 ): Promise<{ headers?: Record<string, string> }> {
 	try {
-		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuth');
+		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuthApi');
 
 		if (!header || !header.value) {
 			return { headers: undefined };

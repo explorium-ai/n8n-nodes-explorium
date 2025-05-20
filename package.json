@@ -2,6 +2,7 @@
 	"name": "@explorium.ai/n8n-nodes-explorium",
 	"version": "1.0.0",
 	"description": "Explorium MCP node for n8n",
+	"private": false,
 	"keywords": [
 		"n8n-community-node-package",
 		"mcp",
@@ -11,19 +12,22 @@
 		"explorium-mcp-n8n"
 	],
 	"license": "MIT",
-	"homepage": "https://github.com/nerding-io/n8n-nodes-mcp#readme",
+	"author": {
+		"name": "Explorium"
+	},
+	"homepage": "https://developers.explorium.ai/",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/nerding-io/n8n-nodes-mcp.git"
+		"url": "git+https://github.com/explorium-ai/n8n-nodes-explorium"
 	},
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc && gulp build:icons",
 		"dev": "tsc --watch",
-		"format": "prettier nodes credentials --write",
-		"lint": "eslint nodes credentials package.json",
-		"lintfix": "eslint nodes credentials package.json --fix",
-		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+		"format": "prettier nodes --write",
+		"lint": "eslint nodes package.json",
+		"lintfix": "eslint nodes package.json --fix",
+		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes package.json"
 	},
 	"files": [
 		"dist"
@@ -59,7 +63,6 @@
 	"peerDependencies": {
 		"n8n-workflow": "*"
 	},
-	"author": "Explorium",
 	"bugs": {
 		"url": "https://github.com/nerding-io/n8n-nodes-mcp/issues"
 	}
