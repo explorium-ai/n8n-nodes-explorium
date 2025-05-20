@@ -93,13 +93,14 @@ export class ExploriumMcp implements INodeType {
 
 		const { headers } = await getAuthHeaders(this);
 
-		if (!headers) {
-			const error = new NodeOperationError(node, 'HTTP Header Authentication is required', {
-				itemIndex,
-				description: 'Please configure the HTTP Header Authentication credentials properly.',
-			});
+		const setError = (message: string, description?: string): SupplyData => {
+			const error = new NodeOperationError(node, message, { itemIndex, description });
 			this.addOutputData(NodeConnectionType.AiTool, itemIndex, error);
 			throw error;
+		};
+
+		if (!headers) {
+			return setError('HTTP Header Authentication is required', 'Please configure the HTTP Header Authentication credentials properly.');
 		}
 
 		const client = await connectMcpClient({
@@ -108,12 +109,6 @@ export class ExploriumMcp implements INodeType {
 			name: node.type,
 			version: node.typeVersion,
 		});
-
-		const setError = (message: string, description?: string): SupplyData => {
-			const error = new NodeOperationError(node, message, { itemIndex, description });
-			this.addOutputData(NodeConnectionType.AiTool, itemIndex, error);
-			throw error;
-		};
 
 		if (!client.ok) {
 			this.logger.error('ExploriumMcp: Failed to connect to MCP Server', {

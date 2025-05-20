@@ -1,7 +1,8 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { CompatibilityCallToolResultSchema } from '@modelcontextprotocol/sdk/types.js';
-import { Toolkit } from 'langchain/agents';
+import { jsonSchemaToZod } from '@n8n/json-schema-to-zod';
+import type { JSONSchema7 } from 'json-schema';
 import { DynamicStructuredTool, type DynamicStructuredToolInput } from 'langchain/tools';
 import {
 	createResultError,
@@ -10,9 +11,7 @@ import {
 	type IExecuteFunctions,
 	type Result,
 } from 'n8n-workflow';
-import { type ZodTypeAny, z } from 'zod';
-import { jsonSchemaToZod } from '@n8n/json-schema-to-zod';
-import type { JSONSchema7 } from 'json-schema';
+import { z } from 'zod';
 
 type McpTool = { name: string; description?: string; inputSchema: JSONSchema7 };
 
@@ -91,30 +90,6 @@ export function mcpToolToDynamicTool(
 	});
 }
 
-export class McpToolkit extends Toolkit {
-	constructor(public tools: Array<DynamicStructuredTool<ZodTypeAny>>) {
-		super();
-	}
-}
-
-function safeCreateUrl(url: string, baseUrl?: string | URL): Result<URL, Error> {
-	try {
-		return createResultOk(new URL(url, baseUrl));
-	} catch (error) {
-		return createResultError(error);
-	}
-}
-
-function normalizeAndValidateUrl(input: string): Result<URL, Error> {
-	const withProtocol = !/^https?:\/\//i.test(input) ? `https://${input}` : input;
-	const parsedUrl = safeCreateUrl(withProtocol);
-
-	if (!parsedUrl.ok) {
-		return createResultError(parsedUrl.error);
-	}
-
-	return parsedUrl;
-}
 
 type ConnectMcpClientError =
 	| { type: 'invalid_url'; error: Error }
@@ -131,13 +106,9 @@ export async function connectMcpClient({
 	version: number;
 }): Promise<Result<Client, ConnectMcpClientError>> {
 	try {
-		const endpoint = normalizeAndValidateUrl(sseEndpoint);
+		const endpoint = new URL(sseEndpoint);
 
-		if (!endpoint.ok) {
-			return createResultError({ type: 'invalid_url', error: endpoint.error });
-		}
-
-		const transport = new SSEClientTransport(endpoint.result, {
+		const transport = new SSEClientTransport(endpoint, {
 			eventSourceInit: {
 				fetch: async (url, init) =>
 					await fetch(url, {
