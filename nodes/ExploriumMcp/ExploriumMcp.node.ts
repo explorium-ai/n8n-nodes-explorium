@@ -49,7 +49,7 @@ export class ExploriumMcp implements INodeType {
 		outputs: [{ type: NodeConnectionType.AiTool, displayName: 'Tools' }],
 		credentials: [
 			{
-				name: 'httpHeaderAuthApi',
+				name: 'httpHeaderAuth',
 				required: true,
 				displayOptions: {
 					show: {
@@ -102,7 +102,10 @@ export class ExploriumMcp implements INodeType {
 		};
 
 		if (!headers) {
-			return setError('HTTP Header Authentication is required', 'Please configure the HTTP Header Authentication credentials properly.');
+			return setError(
+				'HTTP Header Authentication is required',
+				'Please configure the HTTP Header Authentication credentials properly.',
+			);
 		}
 
 		const client = await connectMcpClient({

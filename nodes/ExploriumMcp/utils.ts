@@ -90,7 +90,6 @@ export function mcpToolToDynamicTool(
 	});
 }
 
-
 type ConnectMcpClientError =
 	| { type: 'invalid_url'; error: Error }
 	| { type: 'connection'; error: Error };
@@ -138,7 +137,7 @@ export async function getAuthHeaders(
 	ctx: Pick<IExecuteFunctions, 'getCredentials'>,
 ): Promise<{ headers?: Record<string, string> }> {
 	try {
-		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuthApi');
+		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuth');
 
 		if (!header || !header.value) {
 			return { headers: undefined };
