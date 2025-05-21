@@ -34,7 +34,7 @@
 	"n8n": {
 		"n8nNodesApiVersion": 1,
 		"credentials": [
-			"dist/credentials/EvolutionApi.credentials.js"
+			"dist/credentials/HttpHeaderAuthApi.credentials.js"
 		],
 		"nodes": [
 			"dist/nodes/ExploriumMcp/ExploriumMcp.node.js"

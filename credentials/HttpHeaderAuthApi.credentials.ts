@@ -1,6 +1,6 @@
 import { ICredentialType, INodeProperties } from 'n8n-workflow';
 
-export class HttpHeaderAuth implements ICredentialType {
+export class HttpHeaderAuthApi implements ICredentialType {
 	name = 'httpHeaderAuthApi';
 	displayName = 'HTTP Header Auth';
 	documentationUrl = 'https://developers.explorium.ai/';
