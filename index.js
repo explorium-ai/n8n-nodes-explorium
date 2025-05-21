@@ -4,5 +4,5 @@ const { HttpHeaderAuth } = require('./dist/credentials/HttpHeaderAuth.credential
 
 module.exports = {
 	nodeTypes: { exploriumMcp: ExploriumMcp },
-	credentialTypes: { httpHeaderAuth: HttpHeaderAuth },
+	credentialTypes: { httpHeaderAuthApi: HttpHeaderAuth },
 };

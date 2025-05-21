@@ -3,7 +3,7 @@ import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { CompatibilityCallToolResultSchema } from '@modelcontextprotocol/sdk/types.js';
 import { jsonSchemaToZod } from '@n8n/json-schema-to-zod';
 import type { JSONSchema7 } from 'json-schema';
-import { DynamicStructuredTool, type DynamicStructuredToolInput } from 'langchain/tools';
+import { DynamicStructuredTool, type DynamicStructuredToolInput } from '@langchain/core/tools';
 import { createResultError, createResultOk, type IDataObject, type Result } from 'n8n-workflow';
 import { z } from 'zod';
 

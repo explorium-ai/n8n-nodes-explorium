@@ -2,7 +2,6 @@
 	"name": "@explorium.ai/n8n-nodes-explorium",
 	"version": "1.0.5",
 	"description": "Explorium MCP node for n8n",
-	"private": false,
 	"keywords": [
 		"n8n-community-node-package",
 		"mcp",
@@ -27,7 +26,7 @@
 		"format": "prettier nodes credentials --write",
 		"lint": "eslint nodes credentials package.json",
 		"lintfix": "eslint nodes credentials package.json --fix",
-		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes package.json"
+		"prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
 	},
 	"files": [
 		"dist"
