@@ -63,6 +63,6 @@
 		"n8n-workflow": "*"
 	},
 	"bugs": {
-        "url": "https://github.com/explorium-ai/n8n-nodes-explorium/issues"
+		"url": "https://github.com/explorium-ai/n8n-nodes-explorium/issues"
 	}
 }
