@@ -4,13 +4,7 @@ import { CompatibilityCallToolResultSchema } from '@modelcontextprotocol/sdk/typ
 import { jsonSchemaToZod } from '@n8n/json-schema-to-zod';
 import type { JSONSchema7 } from 'json-schema';
 import { DynamicStructuredTool, type DynamicStructuredToolInput } from 'langchain/tools';
-import {
-	createResultError,
-	createResultOk,
-	type IDataObject,
-	type IExecuteFunctions,
-	type Result,
-} from 'n8n-workflow';
+import { createResultError, createResultOk, type IDataObject, type Result } from 'n8n-workflow';
 import { z } from 'zod';
 
 type McpTool = { name: string; description?: string; inputSchema: JSONSchema7 };
@@ -130,23 +124,6 @@ export async function connectMcpClient({
 		return createResultOk(client);
 	} catch (error) {
 		return createResultError({ type: 'connection', error });
-	}
-}
-
-export async function getAuthHeaders(
-	ctx: Pick<IExecuteFunctions, 'getCredentials'>,
-): Promise<{ headers?: Record<string, string> }> {
-	try {
-		const header = await ctx.getCredentials<{ value: string }>('httpHeaderAuth');
-
-		if (!header || !header.value) {
-			return { headers: undefined };
-		}
-
-		return { headers: { Authorization: `Bearer ${header.value}` } };
-	} catch (error) {
-		// Credentials couldn't be retrieved
-		return { headers: undefined };
 	}
 }
 

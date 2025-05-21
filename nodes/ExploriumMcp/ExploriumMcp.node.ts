@@ -7,13 +7,7 @@ import {
 	type SupplyData,
 } from 'n8n-workflow';
 
-import {
-	connectMcpClient,
-	createCallTool,
-	getAllTools,
-	mcpToolToDynamicTool,
-	getAuthHeaders,
-} from './utils';
+import { connectMcpClient, createCallTool, getAllTools, mcpToolToDynamicTool } from './utils';
 
 // Constant SSE Endpoint
 const SSE_ENDPOINT = 'https://mcp.explorium.ai/sse';
@@ -91,9 +85,11 @@ export class ExploriumMcp implements INodeType {
 	};
 
 	async supplyData(this: ISupplyDataFunctions, itemIndex: number): Promise<SupplyData> {
+		const credentials = await this.getCredentials('httpHeaderAuth');
+		const headers = {
+			Authorization: `Bearer ${credentials.value}`,
+		};
 		const node = this.getNode();
-
-		const { headers } = await getAuthHeaders(this);
 
 		const setError = (message: string, description?: string): SupplyData => {
 			const error = new NodeOperationError(node, message, { itemIndex, description });
