@@ -1,6 +1,6 @@
 {
 	"name": "@explorium.ai/n8n-nodes-explorium",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "Explorium MCP node for n8n",
 	"keywords": [
 		"n8n-community-node-package",
