@@ -58,15 +58,6 @@ npm run dev
 pnpm run dev
 ```
 
-### Testing
-
-To run tests:
-```bash
-npm test
-# or
-pnpm test
-```
-
 ### Linting
 
 To lint the code:
