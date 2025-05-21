@@ -59,9 +59,6 @@
 		"zod": "^3.24.0",
 		"zod-to-json-schema": "^3.24.0"
 	},
-	"overrides": {
-		"pkce-challenge": "3.0.0"
-	},
 	"peerDependencies": {
 		"n8n-workflow": "*"
 	},
