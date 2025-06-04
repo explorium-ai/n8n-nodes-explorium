@@ -9,7 +9,7 @@ import {
 import { connectMcpClient, createCallTool, getAllTools, mcpToolToDynamicTool } from './utils';
 
 // Constant SSE Endpoint
-const SSE_ENDPOINT = 'https://mcp.explorium.ai/sse';
+const SSE_ENDPOINT = 'https://mcp-auth.explorium.ai/sse';
 
 export class ExploriumMcp implements INodeType {
 	description: INodeTypeDescription = {
@@ -86,7 +86,8 @@ export class ExploriumMcp implements INodeType {
 	async supplyData(this: ISupplyDataFunctions, itemIndex: number): Promise<SupplyData> {
 		const credentials = await this.getCredentials('httpHeaderAuthApi');
 		const headers = {
-			Authorization: `Bearer ${credentials.value}`,
+			api_key: String(credentials.value),
+			// Authorization: `Bearer ${credentials.value}`,
 		};
 		const node = this.getNode();
 
@@ -103,6 +104,7 @@ export class ExploriumMcp implements INodeType {
 			);
 		}
 
+		console.log(headers, headers);
 		const client = await connectMcpClient({
 			sseEndpoint: SSE_ENDPOINT,
 			headers,
