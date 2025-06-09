@@ -58,44 +58,45 @@ export class ExploriumApi implements INodeType {
 				})),
 				default: '',
 			},
-			{
-				displayName: 'Parameters',
-				name: 'parameters',
-				type: 'collection',
-				placeholder: 'Add Parameter',
-				default: {},
-				options: Object.entries(operations).reduce((res, [key, value]) => {
-					const current: INodeProperties[] = [];
+			...Object.entries(operations).map(([key, value]) => {
+				const options: INodeProperties[] = [];
 
-					if (value.input.body) {
-						// eslint-disable-next-line
-						current.push({
-							displayName: 'Body',
-							typeOptions: { rows: 4 },
-							name: 'body',
-							type: 'json',
-							default: value.input.body.example ?? '',
-							description: 'The body of the request',
-							displayOptions: { show: { '/operation': [key] } },
-						});
-					}
+				if (value.input.body) {
+					// eslint-disable-next-line
+					options.push({
+						displayName: `Body`,
+						typeOptions: { rows: 4 },
+						name: 'body',
+						type: 'json',
+						default: value.input.body.example ?? '',
+						description: 'The body of the request',
+					});
+				}
 
-					if (value.input.search) {
-						// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
-						current.push({
-							displayName: 'Query parameters',
-							typeOptions: { rows: 4 },
-							name: 'search',
-							type: 'json',
-							default: value.input.search.example,
-							description: 'The query parameters of the request',
-							displayOptions: { show: { '/operation': [key] } },
-						});
-					}
+				if (value.input.search) {
+					// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
+					options.push({
+						displayName: 'Query parameters',
+						typeOptions: { rows: 4 },
+						name: 'search',
+						type: 'json',
+						default: value.input.search.example,
+						description: 'The query parameters of the request',
+					});
+				}
 
-					return [...res, ...current];
-				}, [] as INodeProperties[]),
-			},
+				const properties: INodeProperties = {
+					displayName: 'Parameters',
+					name: 'parameters',
+					type: 'collection',
+					placeholder: 'Add Parameter',
+					default: {},
+					displayOptions: { show: { '/operation': [key] } },
+					options: options,
+				};
+
+				return properties;
+			}),
 		],
 	};
 
